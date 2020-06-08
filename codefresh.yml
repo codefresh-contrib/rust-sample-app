@@ -1,0 +1,33 @@
+version: "1.0"
+stages:
+  - "clone"
+  - "build"
+  - "test"
+steps:
+  clone:
+    title: "Cloning repository"
+    type: "git-clone"
+    repo: "codefresh-contrib/rust-sample-app"
+    revision: "master"
+    stage: "clone"
+  compile:
+    title: "Building Code"
+    type: "freestyle" 
+    image: "rust:1.44-stretch" 
+    working_directory: "${{clone}}" 
+    environment:
+      - CARGO_HOME=/codefresh/volume/cargo
+    commands:
+      - "cargo build"
+    stage: "build"    
+  test:
+    title: "Running tests"
+    type: "freestyle" 
+    image: "rust:1.44-stretch" 
+    working_directory: "${{clone}}" 
+    environment:
+      - CARGO_HOME=/codefresh/volume/cargo    
+    commands:
+      - "cargo test"
+    stage: "test"
+
